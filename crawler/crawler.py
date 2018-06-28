@@ -92,15 +92,14 @@ class Crawler:
                 # TODO This is pulling in images that are NOT on the domain.
                 try:
                     response = requests.get(image['src'])
-                except MissingSchema as e:
-                    print(e)
-
-                image_path = self.crawl_output_dir + image['src']
-                if image_path not in self.images_saved:
-                    if response.ok:
-                        self._save_file(image_path, response.content)
-                        self.images_saved = image_path
-                        number_of_filtered_images += 1
+                    image_path = self.crawl_output_dir + image['src']
+                    if image_path not in self.images_saved:
+                        if response.ok:
+                            self._save_file(image_path, response.content)
+                            self.images_saved = image_path
+                            number_of_filtered_images += 1
+                except MissingSchema:
+                    print('dodgy url: \'{}\'')
 
             print('\t{}/{} images saved.'.format(number_of_filtered_images, number_of_images))
 
